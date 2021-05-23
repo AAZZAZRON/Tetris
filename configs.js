@@ -1,5 +1,6 @@
 var defaultConfig = ["ArrowDown", "Space", "ArrowLeft", "ArrowRight", "ArrowUp", "KeyE", "KeyQ", "ShiftLeft"];
 var idNames = ["SoftDrop", "HardDrop", "Left", "Right", "Clockwise", "CClockwise", "OneEighty", "Hold"];
+var areRed = [];
 var allConfirmed;
 
 function configSetup() {
@@ -38,6 +39,12 @@ function changeInputSetting(id) {
     document.getElementById(id).addEventListener("keydown", function(event) {
         document.getElementById(id).value = event["code"];
         allConfirmed = false;
+        if (document.getElementById(id).classList.contains("red")) { // check if red
+            // remove red
+            document.getElementById(areRed[0]).classList.remove("red");
+            document.getElementById(areRed[1]).classList.remove("red");
+            areRed = [];
+        }
     })
 }
 
@@ -45,9 +52,17 @@ function confirmChanges() {
     var used = new Set();
     var newConfig = [];
     for (let i = 0; i < 8; i += 1) {
-        if (used.has(document.getElementById(idNames[i]).value)) {
-            alert("You have duplicates! Please try again.")
-            return;
+        if (used.has(document.getElementById(idNames[i]).value)) { // there is a dupe
+            for (let j = 0; j < 8; j += 1) {
+                if (document.getElementById(idNames[j]).value == document.getElementById(idNames[i]).value) {
+                    // make it obvious they are dupes
+                    document.getElementById(idNames[i]).classList.add("red");
+                    document.getElementById(idNames[j]).classList.add("red");
+                    areRed = [idNames[i], idNames[j]]
+                    // return
+                    return;
+                }
+            }
         }
         newConfig.push(document.getElementById(idNames[i]).value);
         used.add(document.getElementById(idNames[i]).value);
