@@ -2,12 +2,13 @@
     padding: 0px;
     margin: 0px;
     background-color: black;
+    color: white;
+    font-family:'Courier New', Courier, monospace;
 }
 button {
     padding: 20px;
     color: white;
     background-color: rgb(34, 0, 114);
-    font-family:'Courier New', Courier, monospace;
 }
 button:hover {
     cursor: pointer;
@@ -16,8 +17,6 @@ button:hover {
 
 input {
     background-color: rgb(23, 0, 59);
-    color: white;
-    font-family:'Courier New', Courier, monospace;
     text-align: center;
 }
 
@@ -37,8 +36,6 @@ input {
 .mainMenuCSS {
     position: absolute;
     left: 50%;
-    color: white;
-    font-family:'Courier New', Courier, monospace;
     transform: translate(-50%, -50%);
 }
 #title {
@@ -81,10 +78,37 @@ input {
 }
 
 #canvas {
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: rgb(29, 29, 29);
     border: solid rgb(255, 255, 255, 50) 3px;
+}
+
+#holdSpot {
+    position: absolute;
+    background-color: rgb(29, 29, 29);
+    border: solid rgb(255, 255, 255, 50) 3px;
+}
+
+#holdtext {
+    position: absolute;
+    padding: 15px 25px;
+    font-size: 35px;
+    background-color: rgb(0, 0, 0, 0);
+}
+
+
+#queue {
+    position: absolute;
+    background-color: rgb(29, 29, 29);
+    border: solid rgb(255, 255, 255, 50) 3px;
+}
+
+#queuetext {
+    position: absolute;
+    padding: 15px 25px;
+    font-size: 35px;
+    background-color: rgb(0, 0, 0, 0);
 }
