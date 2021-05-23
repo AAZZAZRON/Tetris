@@ -15,4 +15,7 @@ function gamePlaySetup() {
     oneEighty = variables[5];
     hold = variables[6];
     console.log(softDrop, hardDrop, left, right, cw, ccw, oneEighty, hold);
+
+    // reset score
+    document.getElementById("score").innerText = "000000";
 }

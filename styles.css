@@ -111,3 +111,10 @@ input {
     font-size: 25px;
     background-color: rgb(0, 0, 0, 0);
 }
+
+#score {
+    position: absolute;
+    background-color: rgb(0, 0, 0, 0);
+    font-size: 35px;
+    transform: translate(-50%, 0);
+}

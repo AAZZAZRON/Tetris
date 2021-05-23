@@ -24,4 +24,6 @@ function configureGameBoard() {
     document.getElementById("queue").style.left = w / 2 + 223;
     document.getElementById("queuetext").style.top = h / 2 - 403;
     document.getElementById("queuetext").style.left = w / 2 + 223;
+    document.getElementById("score").style.top = h / 2 + 440;
+    document.getElementById("score").style.left = w / 2;
 }
