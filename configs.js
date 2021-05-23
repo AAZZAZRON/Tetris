@@ -19,9 +19,19 @@ function configSetup() {
     allConfirmed = true;
     var values = setConfig();
     for (let i = 0; i < 8; i += 1) {
-        addText(idNames[i], values[i]);
+        document.getElementById(idNames[i]).value = values[i];
         changeInputSetting(idNames[i]);
     }
+}
+
+// set configuration for the game
+function setConfig() {
+    var config = getCookie("configs").split(":monkey:");
+    if (config.length == 1) {
+        addCookie("configs", defaultConfig.join(":monkey:"));
+        return defaultConfig;
+    }
+    return config;
 }
 
 function changeInputSetting(id) {
@@ -44,12 +54,4 @@ function confirmChanges() {
     }
     addCookie("configs", newConfig.join(":monkey:"));
     allConfirmed = true;
-}
-
-function confirmProper() {
-    return 1;
-}
-
-function addText(name, inner) {
-    document.getElementById(name).value = inner;
 }
