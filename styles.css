@@ -79,3 +79,12 @@ input {
 .red {
     background-color:rgb(138, 0, 0);
 }
+
+#canvas {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(29, 29, 29);
+    border: solid rgb(255, 255, 255, 50) 3px;
+}
