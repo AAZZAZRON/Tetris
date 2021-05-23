@@ -5,7 +5,9 @@
 }
 button {
     padding: 20px;
+    color: white;
     background-color: rgb(34, 0, 114);
+    font-family:'Courier New', Courier, monospace;
 }
 button:hover {
     cursor: pointer;
@@ -19,6 +21,18 @@ input {
     text-align: center;
 }
 
+.back-button {
+    position: absolute;
+    font-size: 20px;
+    left: 40%;
+    top: 90%;
+    padding: 20px 35px;
+    transform: translate(-50%, -50%);
+}
+
+#confirm {
+    left: 60%;
+}
 
 .mainMenuCSS {
     position: absolute;
@@ -28,7 +42,8 @@ input {
     transform: translate(-50%, -50%);
 }
 #title {
-    padding: 0% 40% 0% 40%;
+    text-align: center;
+    width: 100%;
     margin-top: 100px;
     font-size: 100px;
     background-color: rgb(138, 0, 0);

@@ -1,5 +1,6 @@
 var softDrop, hardDrop, left, right, cw, ccw, oneEighty, hold;
 function gamePlaySetup() {
+    fadeIn();
     document.getElementById("MainMenu").hidden = true;
     document.getElementById("GamePlay").hidden = false;
     document.getElementById("Configurations").hidden = true;
