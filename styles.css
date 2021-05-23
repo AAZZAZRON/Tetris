@@ -3,13 +3,34 @@
     margin: 0px;
     background-color: black;
 }
+button {
+    padding: 20px;
+    background-color: rgb(34, 0, 114);
+}
+button:hover {
+    cursor: pointer;
+    background-color:rgb(42, 0, 141)
+}
 
-#title {
+
+.mainMenuCSS {
     position: absolute;
     left: 50%;
-    margin-top: 100px;
     color: white;
     font-family:'Courier New', Courier, monospace;
-    font-size: 100px;
     transform: translate(-50%, -50%);
+}
+#title {
+    padding: 0% 40% 0% 40%;
+    margin-top: 100px;
+    font-size: 100px;
+    background-color: rgb(138, 0, 0);
+}
+#start {
+    font-size: 55px;
+    top: 40%;
+}
+#config {
+    font-size: 55px;
+    top: 60%;
 }
