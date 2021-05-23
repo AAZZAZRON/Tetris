@@ -4,6 +4,7 @@ function gamePlaySetup() {
     document.getElementById("MainMenu").hidden = true;
     document.getElementById("GamePlay").hidden = false;
     document.getElementById("Configurations").hidden = true;
+    configureGameBoard(); // set size
     let variables = setConfig();
     softDrop = variables[0];
     hardDrop = variables[1];
