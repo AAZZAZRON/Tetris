@@ -1,0 +1,2 @@
+defaultConfig = [softDrop, hardDrop, left, right, cw, ccw, oneEighty, hold]
+

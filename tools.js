@@ -12,3 +12,13 @@ function fadeIn() {
         }
     }
 }
+
+// set configuration for the game
+function setConfig() {
+    var config = getCookie("configs").split(":monkey:");
+    if (config.length == 1) {
+        addCookie("configs", defaultConfig.join(":monkey:"));
+        return defaultConfig;
+    }
+    return config;
+}
