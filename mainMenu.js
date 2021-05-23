@@ -6,6 +6,7 @@ window.onload = function() {
 
 function mainMenu() {
     document.getElementById("start").onclick = () => gamePlaySetup();
+    document.getElementById("config").onclick = () => configSetup();
     document.getElementById("MainMenu").hidden = false;
     document.getElementById("GamePlay").hidden = true;
     document.getElementById("Configurations").hidden = true;
