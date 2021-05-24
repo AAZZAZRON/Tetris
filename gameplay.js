@@ -39,7 +39,7 @@ function gamePlaySetup() {
     console.log(softDrop, hardDrop, left, right, cw, ccw, oneEighty, hold);
 
     // reset
-    document.getElementById("score").innerText = "000000";
+    document.getElementById("score").innerText = 0;
     queue = [];
     generatePieces();
     counter = 0;
@@ -114,6 +114,7 @@ function dropPiece() {
     let now = Date.now();
     let dif = now - dropStart;
     if (localEnd && dif > 500) {
+        removeCleared();
         newPiece();
         dropStart = Date.now();
     } else if (!localEnd && dif > time) {
@@ -122,6 +123,29 @@ function dropPiece() {
     }
     requestAnimationFrame(dropPiece);
 }
+
+function removeCleared() {
+    var full = false;
+    var localCounter = 0;
+    for (let i = 0; i < 22; i += 1) {
+        full = true;
+        for (let j = 0; j < 10; j += 1) {
+            if (board[i][j] == "transparent") {
+                full = false;
+                break;
+            }
+        }
+        if (full) {
+            board.splice(i, 1);
+            board.unshift(["transparent", "transparent", "transparent", "transparent", "transparent", "transparent", "transparent", "transparent", "transparent", "transparent"]);
+            localCounter += 1;
+        }
+    }
+
+    // tmp
+    document.getElementById("score").innerText = parseInt(document.getElementById("score").innerText, 10) + localCounter;
+}
+
 
 // CLASS
 class Piece {
