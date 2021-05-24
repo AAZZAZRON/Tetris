@@ -57,10 +57,16 @@ function gamePlaySetup() {
     }
     let tmp = queue.shift();
     piece = new Piece(tmp, 0, colours[tmp]);
-    console.log(piece);
     piece.redraw();
     piece.draw();
-    //startGame();
+    if (queue.length < 4) {
+        generatePieces();
+    }
+    pInterval = setInterval(function() {
+        piece.left();
+        piece.down();
+    }, 1000)
+    // startGame();
 }
 
 
@@ -69,7 +75,6 @@ function generatePieces() {
     for (let i = 0; i < 7; i += 1) {
         queue.push(pieceNames[numbers[i]]);
     }
-    console.log(queue);
 }
 function randomize(a, b) {
     return 0.5 - Math.random();
@@ -79,7 +84,8 @@ function startGame() {
     end = false;
     while (!end) {
         localEnd = false;
-        piece = new Piece(queue.shift(), 0);
+        let tmp = queue.shift();
+        piece = new Piece(tmp, 0, colours[tmp]);
         if (queue.length < 4) {
             generatePieces();
         }
@@ -87,13 +93,12 @@ function startGame() {
             if (localEnd) {
                 clearInterval(pInterval);
             }
-            // piece.down;
+            piece.down;
         }, time)
     }
 }
 
 // CLASS
-
 class Piece {
     constructor(name, orient, colour) {
         this.name = name;
@@ -137,5 +142,28 @@ class Piece {
                 mainCtx.strokeRect(j * 40, i * 40, 40, 40);
             }
         }
+    }
+
+    // movement commands
+    down() {
+        piece.remove();
+        // collision detection
+        this.x += 1;
+        piece.redraw();
+        piece.draw();
+    }
+    left() {
+        piece.remove();
+        // collision detection
+        this.y -= 1;
+        piece.redraw();
+        piece.draw();
+    }
+    right() {
+        piece.remove();
+        // collision detection
+        this.y += 1;
+        piece.redraw();
+        piece.draw();
     }
 }
