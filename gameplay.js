@@ -9,9 +9,14 @@ var gamePieces = {
     "J": [[[1, 0, 0], [1, 1, 1], [0, 0, 0]]], 
     "I": [[[0, 0, 0, 0], [1, 1, 1, 1], [0, 0, 0, 0], [0, 0, 0, 0]]]
 }
-
+var colours = {"Z": "red", "T": "purple", "S": "green", "O": "yellow", "L": "orange", "J": "blue", "I": "turquoise"}
 var pieceNames = ["Z", "T", "S", "O", "L", "J", "I"];
-
+var queue;
+var numbers = [0, 1, 2, 3, 4, 5, 6];
+var piece, end, localEnd, pInterval, time;
+const mainCanvas = document.getElementById("canvas");
+var mainCtx = mainCanvas.getContext('2d');
+var board;
 
 function gamePlaySetup() {
     fadeIn();
@@ -30,11 +35,100 @@ function gamePlaySetup() {
     hold = variables[6];
     console.log(softDrop, hardDrop, left, right, cw, ccw, oneEighty, hold);
 
-    // reset score
+    // reset
     document.getElementById("score").innerText = "000000";
+    queue = [];
+    generatePieces();
+    counter = 0;
+    time = 2000;
+    board = [];
+
+    // reset board
+    for (let i = 0; i < 20; i += 1) {
+        board.push([]);
+        for (let j = 0; j < 10; j += 1) {
+            board[i].push("transparent");
+        }
+    }
 
     // set up rotations
     for (let i = 0; i < 7; i += 1) {
         rotate(pieceNames[i]);
+    }
+    let tmp = queue.shift();
+    piece = new Piece(tmp, 0, colours[tmp]);
+    console.log(piece);
+    piece.redraw();
+    piece.draw();
+    //startGame();
+}
+
+
+function generatePieces() {
+    numbers.sort(randomize);
+    for (let i = 0; i < 7; i += 1) {
+        queue.push(pieceNames[numbers[i]]);
+    }
+    console.log(queue);
+}
+function randomize(a, b) {
+    return 0.5 - Math.random();
+}
+
+function startGame() {
+    end = false;
+    while (!end) {
+        localEnd = false;
+        piece = new Piece(queue.shift(), 0);
+        if (queue.length < 4) {
+            generatePieces();
+        }
+        pInterval = setInterval(function() {
+            if (localEnd) {
+                clearInterval(pInterval);
+            }
+            // piece.down;
+        }, time)
+    }
+}
+
+// CLASS
+
+class Piece {
+    constructor(name, orient, colour) {
+        this.name = name;
+        this.orient = orient;
+        this.colour = colour;
+        this.x = 0;
+        this.y = 3;
+    }
+
+    remove() {
+        var arr = gamePieces[this.name][this.orient];
+        for (let i = 0; i < arr.length; i += 1) {
+            for (let j = 0; j < arr.length; j += 1) {
+                if (arr[i][j] == 1) board[(this.x + (j * 40)) / 40][(this.y + (i * 40)) / 40] = "transparent";
+            }
+        }
+    }
+
+    redraw() {
+        var arr = gamePieces[this.name][this.orient];
+        for (let i = 0; i < arr.length; i += 1) {
+            for (let j = 0; j < arr.length; j += 1) {
+                if (arr[i][j] == 1) board[this.x + i][this.y + j] = this.colour;
+            }
+        }
+    }
+
+    draw() {
+        for (let i = 0; i < 20; i += 1) {
+            for (let j = 0; j < 10; j += 1) {
+                mainCtx.fillStyle = board[i][j];
+                mainCtx.fillRect(j * 40, i * 40, 40, 40);
+                mainCtx.fillStyle = "black";
+                mainCtx.strokeRect(j * 40, i * 40, 40, 40);
+            }
+        }
     }
 }

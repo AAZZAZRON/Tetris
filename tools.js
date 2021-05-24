@@ -45,4 +45,5 @@ function rotate(letter) {
         console.log(tmp);
         gamePieces[letter].push(tmp);
     }
+    console.log(gamePieces[letter]);
 }
