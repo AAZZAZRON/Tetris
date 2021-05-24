@@ -58,18 +58,18 @@ input {
     position: absolute;
     color: white;
     text-align: right;
-    font-size: 40px;
+    font-size: 30px;
     left: 35%;
-    margin-top: 10%;
+    margin-top: 275px;
     transform: translate(-50%, -50%);
 }
 
 .configFormRight {
     position: absolute;
     color: white;
-    font-size: 40px;
+    font-size: 30px;
     left: 65%;
-    margin-top: 10%;
+    margin-top: 275px;
     transform: translate(-50%, -50%);
 }
 
