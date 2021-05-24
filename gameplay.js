@@ -263,8 +263,10 @@ class Piece {
         while (piece.detectCollision(one + 1, two)) {
             one += 1;
         }
-        console.log(one, two);
+        let tmp = this.colour
+        this.colour = "#7B7A7C";
         piece.redraw(one, two);
+        this.colour = tmp;
     }
 
     // COLLISION DETECTION
@@ -279,7 +281,7 @@ class Piece {
                 } else {
                     return false;
                 }
-                if (arr[i][j] == 1 && board[r + i][c + j] != "transparent") {
+                if (arr[i][j] == 1 && board[r + i][c + j] != "transparent" && board[r + i][c + j] != "#7B7A7C") {
                     return false;
                 }
             }
