@@ -63,7 +63,7 @@ function gamePlaySetup() {
         generatePieces();
     }
     pInterval = setInterval(function() {
-        piece.left();
+        //piece.left();
         piece.down();
     }, 1000)
     // startGame();
@@ -147,23 +147,42 @@ class Piece {
     // movement commands
     down() {
         piece.remove();
-        // collision detection
-        this.x += 1;
+        if (piece.detectCollision(this.x + 1, this.y)) this.x += 1;
         piece.redraw();
         piece.draw();
     }
     left() {
         piece.remove();
-        // collision detection
-        this.y -= 1;
+        if (piece.detectCollision(this.x, this.y - 1)) this.y -= 1;
         piece.redraw();
         piece.draw();
     }
     right() {
         piece.remove();
-        // collision detection
-        this.y += 1;
+        if (piece.detectCollision(this.x, this.y + 1)) this.y += 1;
         piece.redraw();
         piece.draw();
+    }
+
+    // COLLISION DETECTION
+    detectCollision(r, c) {
+        var arr = gamePieces[this.name][this.orient];
+        for (let i = 0; i < arr.length; i += 1) {
+            for (let j = 0; j < arr.length; j += 1) {
+                if (0 <= r + i && r + i < 22 && 0 <= c + j && c + j < 10) {
+                    
+                } else if (arr[i][j] == 0) {
+
+                } else {
+                    console.log("baf");
+                    return false;
+                }
+                if (arr[i][j] == 1 && board[r + i][c + j] != "transparent") {
+                    console.log("baf");
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
