@@ -12,6 +12,7 @@ function configSetup() {
         if (!allConfirmed) {
             alert("Please confirm your keybind before exiting.");
         } else {
+            body.style.opacity = 1;
             clearInterval(interval);
             mainMenu();
         }
