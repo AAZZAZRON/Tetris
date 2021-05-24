@@ -6,10 +6,12 @@ window.onload = function() {
 function mainMenu() {
     fadeIn();
     document.getElementById("start").onclick = () => {
+        body.style.opacity = 1;
         clearInterval(interval);
         gamePlaySetup()
     };
     document.getElementById("config").onclick = () => {
+        body.style.opacity = 1;
         clearInterval(interval);
         configSetup()
     };
