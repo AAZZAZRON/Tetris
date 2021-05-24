@@ -80,7 +80,8 @@ function userMovement(input) {
     if (key == softDrop) {
         piece.down();
     } else if (key == hardDrop) {
-        // hard drop
+        while (!localEnd) piece.down();
+        dropStart -= 1000;
     } else if (key == left) {
         piece.left();
     } else if (key == right) {
@@ -93,8 +94,6 @@ function userMovement(input) {
         piece.double();
     } else if (key == hold) {
         // hold
-    } else {
-        console.log("not found");
     }
 }
 
@@ -128,7 +127,7 @@ class Piece {
         this.name = name;
         this.orient = orient;
         this.colour = colour;
-        if (name == "O" || name == "I") {
+        if (name == "O") {
             this.x = -1;
             this.y = 3;
         } else {
