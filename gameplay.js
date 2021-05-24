@@ -55,18 +55,7 @@ function gamePlaySetup() {
     for (let i = 0; i < 7; i += 1) {
         rotate(pieceNames[i]);
     }
-    let tmp = queue.shift();
-    piece = new Piece(tmp, 0, colours[tmp]);
-    piece.redraw();
-    piece.draw();
-    if (queue.length < 4) {
-        generatePieces();
-    }
-    pInterval = setInterval(function() {
-        //piece.left();
-        piece.down();
-    }, 1000)
-    // startGame();
+    newPiece();
 }
 
 
@@ -80,22 +69,24 @@ function randomize(a, b) {
     return 0.5 - Math.random();
 }
 
-function startGame() {
-    end = false;
-    while (!end) {
-        localEnd = false;
-        let tmp = queue.shift();
-        piece = new Piece(tmp, 0, colours[tmp]);
-        if (queue.length < 4) {
-            generatePieces();
-        }
-        pInterval = setInterval(function() {
-            if (localEnd) {
-                clearInterval(pInterval);
-            }
-            piece.down;
-        }, time)
+function newPiece() {
+    localEnd = false;
+    let tmp = queue.shift();
+    piece = new Piece(tmp, 0, colours[tmp]);
+    piece.redraw();
+    piece.draw();
+    if (queue.length < 4) {
+        generatePieces();
     }
+    pInterval = setInterval(function() {
+        if (localEnd) {
+            clearInterval(pInterval);
+            if (!end) {
+                newPiece();
+            }
+        }
+        piece.down();
+    }, time)
 }
 
 // CLASS
@@ -147,7 +138,15 @@ class Piece {
     // movement commands
     down() {
         piece.remove();
-        if (piece.detectCollision(this.x + 1, this.y)) this.x += 1;
+        if (piece.detectCollision(this.x + 1, this.y)) {
+            this.x += 1;
+        } else {
+            console.log(this.x);
+            localEnd = true;
+            if (this.x < 2) {
+                end = true;
+            }
+        }
         piece.redraw();
         piece.draw();
     }
@@ -174,11 +173,9 @@ class Piece {
                 } else if (arr[i][j] == 0) {
 
                 } else {
-                    console.log("baf");
                     return false;
                 }
                 if (arr[i][j] == 1 && board[r + i][c + j] != "transparent") {
-                    console.log("baf");
                     return false;
                 }
             }
