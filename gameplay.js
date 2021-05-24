@@ -18,6 +18,7 @@ const mainCanvas = document.getElementById("canvas");
 var mainCtx = mainCanvas.getContext('2d');
 var board;
 var gameStarted = false;
+var dropStart;
 
 function gamePlaySetup() {
     fadeIn();
@@ -41,9 +42,11 @@ function gamePlaySetup() {
     queue = [];
     generatePieces();
     counter = 0;
-    time = 2000;
+    time = 1500;
     board = [];
     gameStarted = true;
+    dropStart = Date.now();
+    localEnd = true;
 
     // reset board
     for (let i = 0; i < 22; i += 1) {
@@ -57,7 +60,7 @@ function gamePlaySetup() {
     for (let i = 0; i < 7; i += 1) {
         rotate(pieceNames[i]);
     }
-    newPiece();
+    dropPiece();
 }
 
 
@@ -87,7 +90,7 @@ function userMovement(input) {
     } else if (key == ccw) {
         piece.ccw();
     } else if (key == oneEighty) {
-        // 180
+        piece.double();
     } else if (key == hold) {
         // hold
     } else {
@@ -104,15 +107,19 @@ function newPiece() {
     if (queue.length < 4) {
         generatePieces();
     }
-    pInterval = setInterval(function() {
-        if (localEnd) {
-            clearInterval(pInterval);
-            if (!end) {
-                newPiece();
-            }
-        }
+}
+
+function dropPiece() {
+    let now = Date.now();
+    let dif = now - dropStart;
+    if (localEnd && dif > 500) {
+        newPiece();
+        dropStart = Date.now();
+    } else if (!localEnd && dif > time) {
         piece.down();
-    }, time)
+        dropStart = Date.now();
+    }
+    requestAnimationFrame(dropPiece);
 }
 
 // CLASS
@@ -167,6 +174,9 @@ class Piece {
         if (piece.detectCollision(this.x + 1, this.y)) {
             this.x += 1;
         } else {
+            if (!localEnd) {
+                dropStart = Date.now();
+            }
             localEnd = true;
             if (this.x < 2) {
                 end = true;
@@ -177,27 +187,59 @@ class Piece {
     }
     left() {
         piece.remove();
-        if (piece.detectCollision(this.x, this.y - 1)) this.y -= 1;
+        if (piece.detectCollision(this.x, this.y - 1)) {
+            this.y -= 1;
+            if (localEnd) {
+                dropStart = Date.now();
+            }
+        }
         piece.redraw();
         piece.draw();
     }
     right() {
         piece.remove();
-        if (piece.detectCollision(this.x, this.y + 1)) this.y += 1;
+        if (piece.detectCollision(this.x, this.y + 1)) {
+            this.y += 1;
+            if (localEnd) {
+                dropStart = Date.now();
+            }
+        }
         piece.redraw();
         piece.draw();
     }
     
     cw() {
         piece.remove();
-        if (piece.detectCollision(this.x, this.y, (this.orient + 1) % 4)) this.orient = (this.orient + 1) % 4;
+        if (piece.detectCollision(this.x, this.y, (this.orient + 1) % 4)) {
+            this.orient = (this.orient + 1) % 4;
+            if (localEnd) {
+                dropStart = Date.now();
+            }
+        }
         piece.redraw();
         piece.draw();
     }
 
     ccw() {
         piece.remove();
-        if (piece.detectCollision(this.x, this.y, (this.orient + 3) % 4)) this.orient = (this.orient + 3) % 4;
+        if (piece.detectCollision(this.x, this.y, (this.orient + 3) % 4)) {
+            this.orient = (this.orient + 3) % 4;
+            if (localEnd) {
+                dropStart = Date.now();
+            }
+        }
+        piece.redraw();
+        piece.draw();
+    }
+
+    double() {
+        piece.remove();
+        if (piece.detectCollision(this.x, this.y, (this.orient + 2) % 4)) {
+            this.orient = (this.orient + 2) % 4;
+            if (localEnd) {
+                dropStart = Date.now();
+            }
+        }
         piece.redraw();
         piece.draw();
     }
