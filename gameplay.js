@@ -1,4 +1,18 @@
 var softDrop, hardDrop, left, right, cw, ccw, oneEighty, hold;
+
+var gamePieces = {
+    "Z": [[[1, 1, 0], [0, 1, 1], [0, 0, 0]]], 
+    "T": [[[0, 1, 0], [1, 1, 1], [0, 0, 0]]], 
+    "S": [[[0, 1, 1], [1, 1, 0], [0, 0, 0]]], 
+    "O": [[[0, 0, 0, 0], [0, 1, 1, 0], [0, 1, 1, 0], [0, 0, 0, 0]]], 
+    "L": [[[0, 0, 1], [1, 1, 1], [0, 0, 0]]], 
+    "J": [[[1, 0, 0], [1, 1, 1], [0, 0, 0]]], 
+    "I": [[[0, 0, 0, 0], [1, 1, 1, 1], [0, 0, 0, 0], [0, 0, 0, 0]]]
+}
+
+var pieceNames = ["Z", "T", "S", "O", "L", "J", "I"];
+
+
 function gamePlaySetup() {
     fadeIn();
     document.getElementById("MainMenu").hidden = true;
@@ -18,4 +32,9 @@ function gamePlaySetup() {
 
     // reset score
     document.getElementById("score").innerText = "000000";
+
+    // set up rotations
+    for (let i = 0; i < 7; i += 1) {
+        rotate(pieceNames[i]);
+    }
 }
