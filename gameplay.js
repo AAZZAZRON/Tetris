@@ -17,6 +17,7 @@ var piece, end, localEnd, pInterval, time;
 const mainCanvas = document.getElementById("canvas");
 var mainCtx = mainCanvas.getContext('2d');
 var board;
+var gameStarted = false;
 
 function gamePlaySetup() {
     fadeIn();
@@ -27,12 +28,12 @@ function gamePlaySetup() {
     let variables = setConfig();
     softDrop = variables[0];
     hardDrop = variables[1];
-    left = variables[1];
-    right = variables[2];
-    cw = variables[3];
-    ccw = variables[4];
-    oneEighty = variables[5];
-    hold = variables[6];
+    left = variables[2];
+    right = variables[3];
+    cw = variables[4];
+    ccw = variables[5];
+    oneEighty = variables[6];
+    hold = variables[7];
     console.log(softDrop, hardDrop, left, right, cw, ccw, oneEighty, hold);
 
     // reset
@@ -42,6 +43,7 @@ function gamePlaySetup() {
     counter = 0;
     time = 2000;
     board = [];
+    gameStarted = true;
 
     // reset board
     for (let i = 0; i < 22; i += 1) {
@@ -67,6 +69,30 @@ function generatePieces() {
 }
 function randomize(a, b) {
     return 0.5 - Math.random();
+}
+
+function userMovement(input) {
+    key = input.code;
+    if (!gameStarted) return;
+    if (key == softDrop) {
+        piece.down();
+    } else if (key == hardDrop) {
+        // hard drop
+    } else if (key == left) {
+        piece.left();
+    } else if (key == right) {
+        piece.right();
+    } else if (key == cw) {
+        piece.cw();
+    } else if (key == ccw) {
+        piece.ccw();
+    } else if (key == oneEighty) {
+        // 180
+    } else if (key == hold) {
+        // hold
+    } else {
+        console.log("not found");
+    }
 }
 
 function newPiece() {
@@ -141,7 +167,6 @@ class Piece {
         if (piece.detectCollision(this.x + 1, this.y)) {
             this.x += 1;
         } else {
-            console.log(this.x);
             localEnd = true;
             if (this.x < 2) {
                 end = true;
@@ -162,10 +187,24 @@ class Piece {
         piece.redraw();
         piece.draw();
     }
+    
+    cw() {
+        piece.remove();
+        if (piece.detectCollision(this.x, this.y, (this.orient + 1) % 4)) this.orient = (this.orient + 1) % 4;
+        piece.redraw();
+        piece.draw();
+    }
+
+    ccw() {
+        piece.remove();
+        if (piece.detectCollision(this.x, this.y, (this.orient + 3) % 4)) this.orient = (this.orient + 3) % 4;
+        piece.redraw();
+        piece.draw();
+    }
 
     // COLLISION DETECTION
-    detectCollision(r, c) {
-        var arr = gamePieces[this.name][this.orient];
+    detectCollision(r, c, o=this.orient) {
+        var arr = gamePieces[this.name][o];
         for (let i = 0; i < arr.length; i += 1) {
             for (let j = 0; j < arr.length; j += 1) {
                 if (0 <= r + i && r + i < 22 && 0 <= c + j && c + j < 10) {
