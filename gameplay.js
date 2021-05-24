@@ -19,6 +19,7 @@ var mainCtx = mainCanvas.getContext('2d');
 var board;
 var gameStarted = false;
 var dropStart;
+var one, two;
 
 function gamePlaySetup() {
     fadeIn();
@@ -101,7 +102,8 @@ function newPiece() {
     localEnd = false;
     let tmp = queue.shift();
     piece = new Piece(tmp, 0, colours[tmp]);
-    piece.redraw();
+    piece.shadow();
+    piece.redraw(piece.x, piece.y);
     piece.draw();
     if (queue.length < 4) {
         generatePieces();
@@ -134,22 +136,24 @@ class Piece {
             this.x = 0;
             this.y = 3;
         }
+        one = -1;
+        two = -1;
     }
 
-    remove() {
+    remove(a, b) {
         var arr = gamePieces[this.name][this.orient];
         for (let i = 0; i < arr.length; i += 1) {
             for (let j = 0; j < arr.length; j += 1) {
-                if (arr[i][j] == 1) board[this.x + i][this.y + j] = "transparent";
+                if (arr[i][j] == 1) board[a + i][b + j] = "transparent";
             }
         }
     }
 
-    redraw() {
+    redraw(a, b) {
         var arr = gamePieces[this.name][this.orient];
         for (let i = 0; i < arr.length; i += 1) {
             for (let j = 0; j < arr.length; j += 1) {
-                if (arr[i][j] == 1) board[this.x + i][this.y + j] = this.colour;
+                if (arr[i][j] == 1) board[a + i][b + j] = this.colour;
             }
         }
     }
@@ -169,7 +173,7 @@ class Piece {
 
     // movement commands
     down() {
-        piece.remove();
+        piece.remove(this.x, this.y);
         if (piece.detectCollision(this.x + 1, this.y)) {
             this.x += 1;
         } else {
@@ -181,66 +185,86 @@ class Piece {
                 end = true;
             }
         }
-        piece.redraw();
+        piece.redraw(this.x, this.y);
         piece.draw();
     }
     left() {
-        piece.remove();
+        piece.remove(this.x, this.y);
+        piece.remove(one, two);
         if (piece.detectCollision(this.x, this.y - 1)) {
             this.y -= 1;
             if (localEnd) {
                 dropStart = Date.now();
             }
         }
-        piece.redraw();
+        piece.shadow();
+        piece.redraw(this.x, this.y);
         piece.draw();
     }
     right() {
-        piece.remove();
+        piece.remove(this.x, this.y);
+        piece.remove(one, two);
         if (piece.detectCollision(this.x, this.y + 1)) {
             this.y += 1;
             if (localEnd) {
                 dropStart = Date.now();
             }
         }
-        piece.redraw();
+        piece.shadow();
+        piece.redraw(this.x, this.y);
         piece.draw();
     }
     
     cw() {
-        piece.remove();
+        piece.remove(this.x, this.y);
+        piece.remove(one, two);
         if (piece.detectCollision(this.x, this.y, (this.orient + 1) % 4)) {
             this.orient = (this.orient + 1) % 4;
             if (localEnd) {
                 dropStart = Date.now();
             }
         }
-        piece.redraw();
+        piece.shadow();
+        piece.redraw(this.x, this.y);
         piece.draw();
     }
 
     ccw() {
-        piece.remove();
+        piece.remove(this.x, this.y);
+        piece.remove(one, two);
         if (piece.detectCollision(this.x, this.y, (this.orient + 3) % 4)) {
             this.orient = (this.orient + 3) % 4;
             if (localEnd) {
                 dropStart = Date.now();
             }
         }
-        piece.redraw();
+        piece.shadow();
+        piece.redraw(this.x, this.y);
         piece.draw();
     }
 
     double() {
-        piece.remove();
+        piece.remove(this.x, this.y);
+        piece.remove(one, two);
         if (piece.detectCollision(this.x, this.y, (this.orient + 2) % 4)) {
             this.orient = (this.orient + 2) % 4;
             if (localEnd) {
                 dropStart = Date.now();
             }
         }
-        piece.redraw();
+        piece.shadow();
+        piece.redraw(this.x, this.y);
         piece.draw();
+    }
+
+    shadow() {
+        one = this.x
+        two = this.y;
+        while (piece.detectCollision(one + 1, two)) {
+            one += 1;
+        }
+        console.log(one, two);
+        piece.redraw(one, two);
     }
 
     // COLLISION DETECTION
