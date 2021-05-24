@@ -44,7 +44,7 @@ function gamePlaySetup() {
     board = [];
 
     // reset board
-    for (let i = 0; i < 20; i += 1) {
+    for (let i = 0; i < 22; i += 1) {
         board.push([]);
         for (let j = 0; j < 10; j += 1) {
             board[i].push("transparent");
@@ -99,15 +99,20 @@ class Piece {
         this.name = name;
         this.orient = orient;
         this.colour = colour;
-        this.x = 0;
-        this.y = 3;
+        if (name == "O" || name == "I") {
+            this.x = -1;
+            this.y = 3;
+        } else {
+            this.x = 0;
+            this.y = 3;
+        }
     }
 
     remove() {
         var arr = gamePieces[this.name][this.orient];
         for (let i = 0; i < arr.length; i += 1) {
             for (let j = 0; j < arr.length; j += 1) {
-                if (arr[i][j] == 1) board[(this.x + (j * 40)) / 40][(this.y + (i * 40)) / 40] = "transparent";
+                if (arr[i][j] == 1) board[this.x + i][this.y + j] = "transparent";
             }
         }
     }
@@ -122,9 +127,11 @@ class Piece {
     }
 
     draw() {
-        for (let i = 0; i < 20; i += 1) {
+        mainCtx.clearRect(0, 0, mainCanvas.clientWidth, mainCanvas.clientHeight)
+        for (let i = 0; i < 22; i += 1) {
             for (let j = 0; j < 10; j += 1) {
-                mainCtx.fillStyle = board[i][j];
+                if (i < 2 && board[i][j] === "transparent") mainCtx.fillStyle = "black";
+                else mainCtx.fillStyle = board[i][j];
                 mainCtx.fillRect(j * 40, i * 40, 40, 40);
                 mainCtx.fillStyle = "black";
                 mainCtx.strokeRect(j * 40, i * 40, 40, 40);

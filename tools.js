@@ -17,13 +17,13 @@ function fadeIn() {
 function configureGameBoard() {
     var w = window.innerWidth;
     var h = window.innerHeight;
-    document.getElementById("holdSpot").style.top = h / 2 - 403;
+    document.getElementById("holdSpot").style.top = h / 2 - 363;
     document.getElementById("holdSpot").style.left = w / 2 - 386;
-    document.getElementById("holdtext").style.top = h / 2 - 403;
+    document.getElementById("holdtext").style.top = h / 2 - 363;
     document.getElementById("holdtext").style.left = w / 2 - 386;
-    document.getElementById("queue").style.top = h / 2 - 403;
+    document.getElementById("queue").style.top = h / 2 - 363;
     document.getElementById("queue").style.left = w / 2 + 223;
-    document.getElementById("queuetext").style.top = h / 2 - 403;
+    document.getElementById("queuetext").style.top = h / 2 - 363;
     document.getElementById("queuetext").style.left = w / 2 + 223;
     document.getElementById("score").style.top = h / 2 + 440;
     document.getElementById("score").style.left = w / 2;
@@ -42,8 +42,6 @@ function rotate(letter) {
                 tmp[j].push(arr[i][j]);
             }
         }
-        console.log(tmp);
         gamePieces[letter].push(tmp);
     }
-    console.log(gamePieces[letter]);
 }
