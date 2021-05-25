@@ -1,4 +1,6 @@
 var softDrop, hardDrop, left, right, cw, ccw, oneEighty, hold;
+var softDropB, leftB, rightB;
+
 
 var gamePieces = {
     "Z": [[[1, 1, 0], [0, 1, 1], [0, 0, 0]]], 
@@ -18,7 +20,7 @@ const mainCanvas = document.getElementById("canvas");
 var mainCtx = mainCanvas.getContext('2d');
 var board;
 var gameStarted = false;
-var dropStart;
+var dropStart, uiStart;
 var one, two;
 
 function gamePlaySetup() {
@@ -47,7 +49,10 @@ function gamePlaySetup() {
     board = [];
     gameStarted = true;
     dropStart = Date.now();
+    uiStart = Date.now();
     localEnd = true;
+    softDropB = false, leftB = false, rightB = false;
+
 
     // reset board
     for (let i = 0; i < 22; i += 1) {
@@ -62,6 +67,7 @@ function gamePlaySetup() {
         rotate(pieceNames[i]);
     }
     dropPiece();
+    userInput();
 }
 
 
@@ -75,18 +81,36 @@ function randomize(a, b) {
     return 0.5 - Math.random();
 }
 
-function userMovement(input) {
+function userInput() {
+    let now = Date.now();
+    let dif = now - uiStart;
+    if (dif > 75) {
+        if (softDropB) {
+            piece.down();
+        }
+        if (leftB) {
+            piece.left();
+        }
+        if (rightB) {
+            piece.right();
+        }
+        uiStart = Date.now();
+    }
+    if (!end) requestAnimationFrame(userInput);
+}
+
+function keyDown(input) {
     key = input.code;
     if (!gameStarted) return;
     if (key == softDrop) {
-        piece.down();
+        softDropB = true;
     } else if (key == hardDrop) {
         while (!localEnd) piece.down();
         dropStart -= 1000;
     } else if (key == left) {
-        piece.left();
+        leftB = true
     } else if (key == right) {
-        piece.right();
+        rightB = true;
     } else if (key == cw) {
         piece.cw();
     } else if (key == ccw) {
@@ -95,6 +119,18 @@ function userMovement(input) {
         piece.double();
     } else if (key == hold) {
         // hold
+    }
+}
+
+function keyUp(input) {
+    key = input.code;
+    if (!gameStarted) return;
+    if (key == softDrop) {
+        softDropB = false;
+    } else if (key == left) {
+        leftB = false;
+    } else if (key == right) {
+        rightB = false;
     }
 }
 
@@ -121,7 +157,7 @@ function dropPiece() {
         piece.down();
         dropStart = Date.now();
     }
-    requestAnimationFrame(dropPiece);
+    if (!end) requestAnimationFrame(dropPiece);
 }
 
 function removeCleared() {
@@ -205,7 +241,7 @@ class Piece {
                 dropStart = Date.now();
             }
             localEnd = true;
-            if (this.x < 2) {
+            if (this.x <= 2) {
                 end = true;
             }
         }

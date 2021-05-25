@@ -1,7 +1,8 @@
 var body = document.getElementById("body");
 window.onload = function() {
     mainMenu();
-    document.onkeydown = userMovement;
+    document.onkeydown = keyDown;
+    document.onkeyup = keyUp;
 };
 
 function mainMenu() {
