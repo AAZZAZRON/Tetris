@@ -18,12 +18,12 @@ function configureGameBoard() {
     var w = window.innerWidth;
     var h = window.innerHeight;
     document.getElementById("holdSpot").style.top = h / 2 - 363;
-    document.getElementById("holdSpot").style.left = w / 2 - 386;
-    document.getElementById("holdtext").style.top = h / 2 - 363;
-    document.getElementById("holdtext").style.left = w / 2 - 386;
+    document.getElementById("holdSpot").style.left = w / 2 - 426;
+    document.getElementById("holdtext").style.top = h / 2 - 370;
+    document.getElementById("holdtext").style.left = w / 2 - 426;
     document.getElementById("queue").style.top = h / 2 - 363;
     document.getElementById("queue").style.left = w / 2 + 223;
-    document.getElementById("queuetext").style.top = h / 2 - 363;
+    document.getElementById("queuetext").style.top = h / 2 - 370;
     document.getElementById("queuetext").style.left = w / 2 + 223;
     document.getElementById("score").style.top = h / 2 + 440;
     document.getElementById("score").style.left = w / 2;

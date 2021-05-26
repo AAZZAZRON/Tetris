@@ -161,6 +161,7 @@ function dropPiece() {
     let now = Date.now();
     let dif = now - dropStart;
     if (localEnd && dif > 500) {
+        if (alreadyHold) drawToHold(currentlyHolding, colours[currentlyHolding]);
         alreadyHold = false;
         removeCleared();
         newPiece();
