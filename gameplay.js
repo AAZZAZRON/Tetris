@@ -15,7 +15,7 @@ var colours = {"Z": "red", "T": "purple", "S": "green", "O": "yellow", "L": "ora
 var pieceNames = ["Z", "T", "S", "O", "L", "J", "I"];
 var queue;
 var numbers = [0, 1, 2, 3, 4, 5, 6];
-var piece, end, localEnd, pInterval, time;
+var piece, end, localEnd, pInterval, time, moveTime;
 const mainCanvas = document.getElementById("canvas");
 var mainCtx = mainCanvas.getContext('2d');
 var board;
@@ -46,6 +46,7 @@ function gamePlaySetup() {
     generatePieces();
     counter = 0;
     time = 1500;
+    moveTime = 75;
     board = [];
     gameStarted = true;
     dropStart = Date.now();
@@ -84,7 +85,7 @@ function randomize(a, b) {
 function userInput() {
     let now = Date.now();
     let dif = now - uiStart;
-    if (dif > 75) {
+    if (dif > moveTime) {
         if (softDropB) {
             piece.down();
         }
@@ -103,14 +104,20 @@ function keyDown(input) {
     key = input.code;
     if (!gameStarted) return;
     if (key == softDrop) {
+        piece.down();
         softDropB = true;
+        uiStart = Date.now() + moveTime;
     } else if (key == hardDrop) {
         while (!localEnd) piece.down();
         dropStart -= 1000;
     } else if (key == left) {
+        piece.left();
         leftB = true;
+        uiStart = Date.now() + moveTime;
     } else if (key == right) {
+        piece.right();
         rightB = true;
+        uiStart = Date.now() + moveTime;
     } else if (key == cw) {
         piece.cw();
     } else if (key == ccw) {
