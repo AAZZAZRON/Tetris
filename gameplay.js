@@ -108,7 +108,7 @@ function keyDown(input) {
         while (!localEnd) piece.down();
         dropStart -= 1000;
     } else if (key == left) {
-        leftB = true
+        leftB = true;
     } else if (key == right) {
         rightB = true;
     } else if (key == cw) {
