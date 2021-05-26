@@ -22,6 +22,7 @@ var board;
 var gameStarted = false;
 var dropStart, uiStart;
 var one, two;
+var alreadyHold;
 
 function gamePlaySetup() {
     fadeIn();
@@ -53,6 +54,9 @@ function gamePlaySetup() {
     uiStart = Date.now();
     localEnd = true;
     softDropB = false, leftB = false, rightB = false;
+    piece = undefined;
+    alreadyHold = false;
+    currentlyHolding = -1;
 
 
     // reset board
@@ -124,8 +128,8 @@ function keyDown(input) {
         piece.ccw();
     } else if (key == oneEighty) {
         piece.double();
-    } else if (key == hold) {
-        // hold
+    } else if (key == hold && !alreadyHold) {
+        piece.hold();
     }
 }
 
@@ -157,6 +161,7 @@ function dropPiece() {
     let now = Date.now();
     let dif = now - dropStart;
     if (localEnd && dif > 500) {
+        alreadyHold = false;
         removeCleared();
         newPiece();
         dropStart = Date.now();
@@ -184,9 +189,13 @@ function removeCleared() {
             localCounter += 1;
         }
     }
+    if (piece != undefined) addScore(localCounter, piece.name);
+}
 
-    // tmp
-    document.getElementById("score").innerText = parseInt(document.getElementById("score").innerText, 10) + localCounter;
+
+function addScore(cleared, type) {
+    document.getElementById("score").innerText = parseInt(document.getElementById("score").innerText, 10) + cleared;
+    // console.log(type);
 }
 
 
@@ -322,6 +331,15 @@ class Piece {
         piece.shadow();
         piece.redraw(this.x, this.y);
         piece.draw();
+    }
+
+    hold() {
+        piece.remove(piece.x, piece.y);
+        piece.remove(one, two);
+        holdPiece(piece.name, piece.colour);
+        newPiece();
+        dropStart = Date.now();
+        alreadyHold = true;
     }
 
     shadow() {
