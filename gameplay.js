@@ -11,7 +11,7 @@ var gamePieces = {
     "J": [[[1, 0, 0], [1, 1, 1], [0, 0, 0]]], 
     "I": [[[0, 0, 0, 0], [1, 1, 1, 1], [0, 0, 0, 0], [0, 0, 0, 0]]]
 }
-var colours = {"Z": "red", "T": "purple", "S": "green", "O": "yellow", "L": "orange", "J": "blue", "I": "turquoise"}
+var colours = {"Z": "#FF3213", "T": "purple", "S": "#72CB3B", "O": "#FFD500", "L": "#FF971C", "J": "#0341AE", "I": "turquoise"}
 var pieceNames = ["Z", "T", "S", "O", "L", "J", "I"];
 var queue;
 var numbers = [0, 1, 2, 3, 4, 5, 6];
@@ -240,10 +240,10 @@ class Piece {
         mainCtx.clearRect(0, 0, mainCanvas.clientWidth, mainCanvas.clientHeight)
         for (let i = 0; i < 22; i += 1) {
             for (let j = 0; j < 10; j += 1) {
-                if (i < 2 && board[i][j] === "transparent") mainCtx.fillStyle = "black";
+                if (i < 2 && board[i][j] === "transparent") mainCtx.fillStyle = "#000000D9";
                 else mainCtx.fillStyle = board[i][j];
                 mainCtx.fillRect(j * 40, i * 40, 40, 40);
-                mainCtx.fillStyle = "black";
+                mainCtx.fillStyle = "#000000D9";
                 mainCtx.strokeRect(j * 40, i * 40, 40, 40);
             }
         }

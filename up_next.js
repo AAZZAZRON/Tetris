@@ -3,7 +3,6 @@ var nextCtx = nextCanvas.getContext('2d');
 
 function updateNext() {
     nextCtx.clearRect(0, 0, nextCanvas.clientWidth, nextCanvas.clientHeight)
-    console.log(queue)
     for (let i = 0; i < 4; i += 1) {
         drawUpNext(queue[i], colours[queue[i]], i * 160);
     }
@@ -16,7 +15,6 @@ function drawUpNext(name, colour, n) {
     var arr = gamePieces[name][0];
     if (arr.length == 3) adjust = 20;
     else if (name == "O") vAdjust = -40;
-    console.log(arr);
 
     // draw
     for (let i = 0; i < arr.length; i += 1) {
@@ -24,7 +22,7 @@ function drawUpNext(name, colour, n) {
             if (arr[i][j]) {
             nextCtx.fillStyle = colour;
             nextCtx.fillRect(j * 40 + 20 + adjust, vAdjust + 40 + i * 40 + n, 40, 40);
-            nextCtx.fillStyle = "black";
+            nextCtx.fillStyle = "#000000D9";
             nextCtx.strokeRect(j * 40 + 20 + adjust, vAdjust + 40 + i * 40 + n, 40, 40)
             }
         }
