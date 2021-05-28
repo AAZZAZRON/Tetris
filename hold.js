@@ -41,7 +41,7 @@ function drawToHold(name, colour) {
             holdCtx.fillStyle = holding[i][j];
             holdCtx.fillRect(j * 40 + 20 + adjust, i * 40 + iAd, 40, 40);
             if (holding[i][j] != "transparent") {
-            holdCtx.fillStyle = "black";
+            holdCtx.fillStyle = "#000000D9";
             holdCtx.strokeRect(j * 40 + 20 + adjust, i * 40 + iAd, 40, 40);
             }
         }
