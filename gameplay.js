@@ -155,6 +155,7 @@ function newPiece() {
     if (queue.length < 4) {
         generatePieces();
     }
+    updateNext();
 }
 
 function dropPiece() {
