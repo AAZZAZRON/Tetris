@@ -1,5 +1,7 @@
 var defaultConfig = ["ArrowDown", "Space", "ArrowLeft", "ArrowRight", "ArrowUp", "KeyE", "KeyQ", "ShiftLeft"];
 var idNames = ["SoftDrop", "HardDrop", "Left", "Right", "Clockwise", "CClockwise", "OneEighty", "Hold"];
+var defaultCC = [40, 32, 37, 39, 38, 69, 81, 16];
+var configCodes;
 var areRed = [];
 var allConfirmed;
 
@@ -29,9 +31,9 @@ function configSetup() {
 
 // set configuration for the game
 function setConfig() {
-    var config = getCookie("configs").split(":monkey:");
+    var config = getCookie("configName").split(":monkey:");
     if (config.length == 1) {
-        addCookie("configs", defaultConfig.join(":monkey:"));
+        addCookie("configName", defaultConfig.join(":monkey:"));
         return defaultConfig;
     }
     return config;
@@ -39,7 +41,9 @@ function setConfig() {
 
 function changeInputSetting(id) {
     document.getElementById(id).addEventListener("keydown", function(event) {
-        document.getElementById(id).value = event["code"];
+        console.log(event);
+        document.getElementById(id).value = event.code;
+        configCodes[idNames.indexOf(id)] = event.keyCode;
         allConfirmed = false;
         if (document.getElementById(id).classList.contains("red")) { // check if red
             // remove red
@@ -69,6 +73,8 @@ function confirmChanges() {
         newConfig.push(document.getElementById(idNames[i]).value);
         used.add(document.getElementById(idNames[i]).value);
     }
-    addCookie("configs", newConfig.join(":monkey:"));
+    console.log(configCodes)
+    addCookie("configName", newConfig.join(":monkey:"));
+    addCookie("configCodes", configCodes.join(":monkey:"));
     allConfirmed = true;
 }

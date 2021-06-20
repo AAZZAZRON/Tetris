@@ -1,7 +1,6 @@
 var softDrop, hardDrop, left, right, cw, ccw, oneEighty, hold;
 var softDropB, leftB, rightB;
 
-
 var gamePieces = {
     "Z": [[[1, 1, 0], [0, 1, 1], [0, 0, 0]]], 
     "T": [[[0, 1, 0], [1, 1, 1], [0, 0, 0]]], 
@@ -22,7 +21,7 @@ var board;
 var gameStarted = false;
 var dropStart, uiStart;
 var one, two;
-var alreadyHold;
+var alreadyHold, usedCW, usedCCW, used180, usedHard;
 
 function gamePlaySetup() {
     fadeIn();
@@ -30,15 +29,15 @@ function gamePlaySetup() {
     document.getElementById("GamePlay").hidden = false;
     document.getElementById("Configurations").hidden = true;
     configureGameBoard(); // set size
-    let variables = setConfig();
-    softDrop = variables[0];
-    hardDrop = variables[1];
-    left = variables[2];
-    right = variables[3];
-    cw = variables[4];
-    ccw = variables[5];
-    oneEighty = variables[6];
-    hold = variables[7];
+
+    softDrop = configCodes[0];
+    hardDrop = configCodes[1];
+    left = configCodes[2];
+    right = configCodes[3];
+    cw = configCodes[4];
+    ccw = configCodes[5];
+    oneEighty = configCodes[6];
+    hold = configCodes[7];
     console.log(softDrop, hardDrop, left, right, cw, ccw, oneEighty, hold);
 
     // reset
@@ -53,9 +52,11 @@ function gamePlaySetup() {
     dropStart = Date.now();
     uiStart = Date.now();
     localEnd = true;
-    softDropB = false, leftB = false, rightB = false;
     piece = undefined;
     alreadyHold = false;
+    usedCW = false;
+    usedCCW = false;
+    used180 = false;
     currentlyHolding = -1;
 
 
@@ -82,7 +83,7 @@ function generatePieces() {
         queue.push(pieceNames[numbers[i]]);
     }
 }
-function randomize(a, b) {
+function randomize() {
     return 0.5 - Math.random();
 }
 
@@ -90,63 +91,54 @@ function userInput() {
     let now = Date.now();
     let dif = now - uiStart;
     if (dif > moveTime) {
-        if (softDropB) {
+        if (holdDownKeys[softDrop]) {
             piece.down();
         }
-        if (leftB) {
+        if (holdDownKeys[left]) {
             piece.left();
         }
-        if (rightB) {
+        if (holdDownKeys[right]) {
             piece.right();
+        }
+        if (holdDownKeys[cw] && !usedCW) {
+            piece.cw();
+            usedCW = true;
+        } 
+        if (holdDownKeys[ccw] && !usedCCW) {
+            piece.ccw();
+            usedCCW = true;
+        } 
+        if (holdDownKeys[oneEighty] && !used180) {
+            piece.double();
+            used180 = true;
+        } 
+        if (holdDownKeys[hold] && !alreadyHold) {
+            piece.hold();
+        } 
+        if (holdDownKeys[hardDrop]) {
+            while (!localEnd) piece.down();
+            dropStart -= 1000;
         }
         uiStart = Date.now();
     }
+
     if (!end) requestAnimationFrame(userInput);
 }
 
 function keyDown(input) {
-    key = input.code;
-    if (!gameStarted) return;
-    if (key == softDrop) {
-        piece.down();
-        softDropB = true;
-        uiStart = Date.now() + moveTime;
-    } else if (key == hardDrop) {
-        while (!localEnd) piece.down();
-        dropStart -= 1000;
-    } else if (key == left) {
-        piece.left();
-        leftB = true;
-        uiStart = Date.now() + moveTime;
-    } else if (key == right) {
-        piece.right();
-        rightB = true;
-        uiStart = Date.now() + moveTime;
-    } else if (key == cw) {
-        piece.cw();
-    } else if (key == ccw) {
-        piece.ccw();
-    } else if (key == oneEighty) {
-        piece.double();
-    } else if (key == hold && !alreadyHold) {
-        piece.hold();
-    }
+    holdDownKeys[input.keyCode] = 1;
 }
 
 function keyUp(input) {
-    key = input.code;
-    if (!gameStarted) return;
-    if (key == softDrop) {
-        softDropB = false;
-    } else if (key == left) {
-        leftB = false;
-    } else if (key == right) {
-        rightB = false;
-    }
+    holdDownKeys[input.keyCode] = 0;
+    if (input.keyCode == configCodes[4]) usedCW = false;
+    if (input.keyCode == configCodes[5]) usedCCW = false;
+    if (input.keyCode == configCodes[6]) used180 = false;
 }
 
 function newPiece() {
     localEnd = false;
+    holdDownKeys[hardDrop] = 0;
     let tmp = queue.shift();
     piece = new Piece(tmp, 0, colours[tmp]);
     piece.shadow();
