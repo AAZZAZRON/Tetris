@@ -1,5 +1,4 @@
 var softDrop, hardDrop, left, right, cw, ccw, oneEighty, hold;
-var softDropB, leftB, rightB;
 
 var gamePieces = {
     "Z": [[[1, 1, 0], [0, 1, 1], [0, 0, 0]]], 
@@ -22,6 +21,8 @@ var gameStarted = false;
 var dropStart, uiStart;
 var one, two;
 var alreadyHold, usedCW, usedCCW, used180, usedHard;
+var usedDown, usedLeft, usedRight;
+var frameRate = 5;
 
 function gamePlaySetup() {
     fadeIn();
@@ -46,7 +47,6 @@ function gamePlaySetup() {
     generatePieces();
     counter = 0;
     time = 1500;
-    moveTime = 75;
     board = [];
     gameStarted = true;
     dropStart = Date.now();
@@ -57,6 +57,8 @@ function gamePlaySetup() {
     usedCW = false;
     usedCCW = false;
     used180 = false;
+    usedLeft = 0;
+    usedRight = 0;
     currentlyHolding = -1;
 
 
@@ -88,38 +90,37 @@ function randomize() {
 }
 
 function userInput() {
-    let now = Date.now();
-    let dif = now - uiStart;
-    if (dif > moveTime) {
-        if (holdDownKeys[softDrop]) {
-            piece.down();
-        }
-        if (holdDownKeys[left]) {
-            piece.left();
-        }
-        if (holdDownKeys[right]) {
-            piece.right();
-        }
-        if (holdDownKeys[cw] && !usedCW) {
-            piece.cw();
-            usedCW = true;
-        } 
-        if (holdDownKeys[ccw] && !usedCCW) {
-            piece.ccw();
-            usedCCW = true;
-        } 
-        if (holdDownKeys[oneEighty] && !used180) {
-            piece.double();
-            used180 = true;
-        } 
-        if (holdDownKeys[hold] && !alreadyHold) {
-            piece.hold();
-        } 
-        if (holdDownKeys[hardDrop]) {
-            while (!localEnd) piece.down();
-            dropStart -= 1000;
-        }
-        uiStart = Date.now();
+    if (holdDownKeys[softDrop]) {
+        piece.down();
+    }
+    if (holdDownKeys[left]) {
+        usedLeft += 1;
+        if (usedLeft % frameRate == 0) piece.left();
+    }
+    if (holdDownKeys[right]) {
+        usedRight += 1;
+        if (usedRight % frameRate == 0) piece.right();
+    }
+
+    // one time
+    if (holdDownKeys[cw] && !usedCW) {
+        piece.cw();
+        usedCW = true;
+    } 
+    if (holdDownKeys[ccw] && !usedCCW) {
+        piece.ccw();
+        usedCCW = true;
+    } 
+    if (holdDownKeys[oneEighty] && !used180) {
+        piece.double();
+        used180 = true;
+    } 
+    if (holdDownKeys[hold] && !alreadyHold) {
+        piece.hold();
+    } 
+    if (holdDownKeys[hardDrop]) {
+        while (!localEnd) piece.down();
+        dropStart -= 1000;
     }
 
     if (!end) requestAnimationFrame(userInput);
@@ -134,7 +135,10 @@ function keyUp(input) {
     if (input.keyCode == configCodes[4]) usedCW = false;
     if (input.keyCode == configCodes[5]) usedCCW = false;
     if (input.keyCode == configCodes[6]) used180 = false;
+    if (input.keyCode == configCodes[2]) usedLeft = 0;
+    if (input.keyCode == configCodes[3]) usedRight = 0;
 }
+
 
 function newPiece() {
     localEnd = false;
